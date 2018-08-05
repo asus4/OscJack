@@ -12,6 +12,9 @@ Desktop.ini
 *.sln
 *.swp
 
+.vs
+obj
+
 # Unity
 /Library
 /Temp

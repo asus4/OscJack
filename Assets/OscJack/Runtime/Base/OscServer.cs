@@ -26,7 +26,7 @@ namespace OscJack
             get { return _dispatcher; }
         }
 
-        public OscServer(int listenPort)
+        public OscServer(int listenPort, string multicast = null)
         {
             _dispatcher = new OscMessageDispatcher();
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -37,6 +37,15 @@ namespace OscJack
             _socket.ReceiveTimeout = 100;
 
             _socket.Bind(new IPEndPoint(IPAddress.Any, listenPort));
+
+            if (!string.IsNullOrEmpty(multicast))
+            {
+                _socket.SetSocketOption(
+                    SocketOptionLevel.IP,
+                    SocketOptionName.AddMembership,
+                    new MulticastOption(IPAddress.Parse(multicast), IPAddress.Any)
+                );
+            }
 
             _thread = new Thread(ServerLoop);
             _thread.Start();

@@ -10,7 +10,9 @@ class ClientTest : MonoBehaviour
     IEnumerator Start()
     {
         // IP address, port number
-        var client = new OscClient("127.0.0.1", 9000);
+        //var client = new OscClient("127.0.0.1", 9000);
+        var client = new OscClient("225.6.7.8", 9000);
+
 
         // Send two-component float values ten times.
         for (var i = 0; i < 10; i++) {
