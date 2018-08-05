@@ -41,7 +41,7 @@ namespace OscJack
 
         public string GetElementAsString(int index)
         {
-            if (index >= _typeTags.Count) return "";
+            if (index >= _typeTags.Count) return "----";
             var tag = _typeTags[index];
             var offs = _offsets[index];
             if (tag == 's') return OscDataTypes.ReadString(_sharedBuffer, offs);

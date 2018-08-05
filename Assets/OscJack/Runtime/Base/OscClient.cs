@@ -128,6 +128,12 @@ namespace OscJack
             _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
         }
 
+        public void Send(OscMessage msg)
+        {
+            msg.Encode(_encoder);
+            _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
+        }
+
         #endregion
 
         #region IDispose implementation
