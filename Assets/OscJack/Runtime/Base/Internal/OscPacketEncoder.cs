@@ -30,7 +30,7 @@ namespace OscJack
         {
             _buffer[_length++] = (Byte)(data >> 24);
             _buffer[_length++] = (Byte)(data >> 16);
-            _buffer[_length++] = (Byte)(data >>  8);
+            _buffer[_length++] = (Byte)(data >> 8);
             _buffer[_length++] = (Byte)(data);
         }
 
@@ -42,6 +42,48 @@ namespace OscJack
             _buffer[_length++] = _tempByte[2];
             _buffer[_length++] = _tempByte[1];
             _buffer[_length++] = _tempByte[0];
+        }
+
+        public void Append(byte[] data, int length)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                _buffer[_length++] = data[i];
+            }
+        }
+
+        public void Append(DateTime datetime)
+        {
+            // time tag
+            var span = datetime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            decimal milliseconds = Convert.ToDecimal(span.TotalMilliseconds);
+
+            // https://stackoverflow.com/questions/16763300/converting-between-ntp-and-c-sharp-datetime
+            var ntpData = new byte[8];
+            decimal intpart = milliseconds / 1000;
+            decimal fractpart = ((milliseconds % 1000) * 0x100000000L) / 1000m;
+
+            //
+            var temp = intpart;
+            for (var i = 3; i >= 0; i--)
+            {
+                ntpData[i] = (byte)(temp % 256);
+                temp = temp / 256;
+            }
+
+            // 
+            temp = fractpart;
+            for (var i = 7; i >= 4; i--)
+            {
+                ntpData[i] = (byte)(temp % 256);
+                temp = temp / 256;
+            }
+
+            //
+            for (int i = 0; i < 8; i++)
+            {
+                _buffer[_length++] = ntpData[i];
+            }
         }
 
         Byte[] _buffer = new Byte[4096];

@@ -32,7 +32,6 @@ namespace OscJack
 
         internal void Encode(OscPacketEncoder _encoder)
         {
-            _encoder.Clear();
             _encoder.Append(address);
             _encoder.Append(MakeTags());
             foreach (var d in data)

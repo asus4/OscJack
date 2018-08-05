@@ -39,6 +39,18 @@ class ServerTest : MonoBehaviour
             );
         });
 
+        server.MessageDispatcher.AddCallback("/test/bundle", (string address, OscDataHandle data) =>
+        {
+            Debug.LogFormat(
+                "{0} {1} {2:0.0} {3} {4}",
+                address,
+                data.GetElementAsInt(0),
+                data.GetElementAsFloat(1),
+                data.GetElementAsBool(2),
+                data.GetElementAsString(3)
+            );
+        });
+
         yield return new WaitForSeconds(15);
         server.Dispose();
     }

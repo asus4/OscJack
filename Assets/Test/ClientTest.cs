@@ -13,6 +13,18 @@ class ClientTest : MonoBehaviour
         //var client = new OscClient("127.0.0.1", 9000);
         var client = new OscClient("225.6.7.8", 9000);
 
+        // Test Blob
+        {
+            yield return new WaitForSeconds(0.5f);
+            var msgs = new OscMessage[]
+            {
+                new OscMessage("/test/bundle", 0, 1f, true, "blob 0"),
+                new OscMessage("/test/bundle", 1, 2f, false, "blob 1"),
+            };
+            client.Send(msgs);
+        }
+
+
         // Test OscMessage
         {
             yield return new WaitForSeconds(0.5f);

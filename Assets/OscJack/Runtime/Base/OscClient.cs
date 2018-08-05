@@ -2,6 +2,7 @@
 // https://github.com/keijiro/OscJack
 
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
@@ -130,7 +131,24 @@ namespace OscJack
 
         public void Send(OscMessage msg)
         {
+            _encoder.Clear();
             msg.Encode(_encoder);
+            _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
+        }
+
+        public void Send(IList<OscMessage> msgs)
+        {
+            _encoder.Clear();
+            _encoder.Append("#bundle");
+            _encoder.Append(DateTime.UtcNow);
+
+            foreach (var msg in msgs)
+            {
+                _blobEncoder.Clear();
+                msg.Encode(_blobEncoder);
+                _encoder.Append(_blobEncoder.Length);
+                _encoder.Append(_blobEncoder.Buffer, _blobEncoder.Length);
+            }
             _socket.Send(_encoder.Buffer, _encoder.Length, SocketFlags.None);
         }
 
@@ -167,6 +185,7 @@ namespace OscJack
         #region Private variables
 
         OscPacketEncoder _encoder = new OscPacketEncoder();
+        OscPacketEncoder _blobEncoder = new OscPacketEncoder();
         Socket _socket;
 
         #endregion
