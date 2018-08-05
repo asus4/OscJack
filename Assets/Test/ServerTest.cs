@@ -22,13 +22,19 @@ class ServerTest : MonoBehaviour
             }
         );
 
+
+        server.MessageDispatcher.AddCallback("/test/bool", (string address, OscDataHandle data) =>
+        {
+            Debug.LogFormat("{0} {1}", address, data.GetElementAsBool(0));
+        });
+
         server.MessageDispatcher.AddCallback("/sensor/skeleton", (string address, OscDataHandle data) =>
         {
             Debug.LogFormat("{0} {1} {2}", address,
                 data.GetElementAsInt(0),
                 data.GetElementAsFloat(1));
         });
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(15);
         server.Dispose();
     }
 }

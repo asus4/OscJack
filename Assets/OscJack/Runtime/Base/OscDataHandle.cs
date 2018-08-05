@@ -50,6 +50,16 @@ namespace OscJack
             return "";
         }
 
+        public bool GetElementAsBool(int index)
+        {
+            if (index >= _typeTags.Count) return false;
+            var tag = _typeTags[index];
+            var offs = _offsets[index];
+            if (tag == 'T') return true;
+            if (tag == 'F') return false;
+            return false;
+        }
+
         #endregion
 
         #region Internal method
@@ -86,6 +96,9 @@ namespace OscJack
                 else if (tag == 's')
                 {
                     offset += OscDataTypes.GetStringSize(buffer, offset);
+                }
+                else if (tag == 'T' || tag == 'F')
+                {
                 }
                 else // tag == 'b'
                 {

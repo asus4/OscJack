@@ -12,7 +12,7 @@ namespace OscJack
 
         public static bool IsSupportedTag(char tag)
         {
-            return tag == 'i' || tag == 'f' || tag == 's' || tag == 'b';
+            return tag == 'i' || tag == 'f' || tag == 's' || tag == 'b' || tag == 'T' || tag == 'F';
         }
 
         public static int Align4(int length)

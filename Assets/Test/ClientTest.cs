@@ -14,6 +14,12 @@ class ClientTest : MonoBehaviour
         var client = new OscClient("225.6.7.8", 9000);
 
 
+        yield return new WaitForSeconds(0.5f);
+        client.Send("/test/bool", true);
+        client.Send("/test/bool", false);
+        yield return new WaitForSeconds(0.5f);
+
+
         // Send two-component float values ten times.
         for (var i = 0; i < 10; i++) {
             yield return new WaitForSeconds(0.5f);
@@ -21,6 +27,7 @@ class ClientTest : MonoBehaviour
                         i * 10.0f,     // First element
                         Random.value); // Second element
         }
+
 
         // Terminate the client.
         client.Dispose();
