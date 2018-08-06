@@ -34,13 +34,20 @@ namespace OscJack
         {
             _encoder.Append(address);
             _encoder.Append(MakeTags());
+
+            if (data == null || data.Length == 0)
+            {
+                return;
+            }
+
             foreach (var d in data)
             {
                 var type = d.GetType();
 
-                if (type == typeof(int)) _encoder.Append((int)d);
-                if (type == typeof(float)) _encoder.Append((float)d);
-                if (type == typeof(string)) _encoder.Append((string)d);
+                if (type == typeof(int)) { _encoder.Append((int)d); }
+                else if (type == typeof(float)) { _encoder.Append((float)d); }
+                else if (type == typeof(string)) { _encoder.Append((string)d); }
+                else if (type == typeof(bool)) { } // nothins 
             }
         }
     }
