@@ -18,14 +18,17 @@ namespace OscJack
         {
             var sb = new StringBuilder();
             sb.Append(',');
-            foreach (var d in data)
+            if (data != null)
             {
-                var type = d.GetType();
-                if (type == typeof(int)) sb.Append('i');
-                else if (type == typeof(float)) sb.Append('f');
-                else if (type == typeof(bool)) sb.Append((bool)d ? 'T' : 'F');
-                else if (type == typeof(string)) sb.Append('s');
-                else sb.Append('?');
+                foreach (var d in data)
+                {
+                    var type = d.GetType();
+                    if (type == typeof(int)) sb.Append('i');
+                    else if (type == typeof(float)) sb.Append('f');
+                    else if (type == typeof(bool)) sb.Append((bool)d ? 'T' : 'F');
+                    else if (type == typeof(string)) sb.Append('s');
+                    else sb.Append('?');
+                }
             }
             return sb.ToString();
         }
@@ -35,7 +38,7 @@ namespace OscJack
             _encoder.Append(address);
             _encoder.Append(MakeTags());
 
-            if (data == null || data.Length == 0)
+            if (data == null)
             {
                 return;
             }
@@ -50,5 +53,26 @@ namespace OscJack
                 else if (type == typeof(bool)) { } // nothins 
             }
         }
+
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(address);
+            sb.Append("  ");
+            sb.Append(MakeTags());
+            if (data != null)
+            {
+                sb.Append("  ");
+                foreach (var d in data)
+                {
+                    sb.Append(d);
+                    sb.Append(' ');
+                }
+            }
+            return sb.ToString();
+        }
+
+
     }
 }
