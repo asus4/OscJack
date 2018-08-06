@@ -21,6 +21,17 @@ namespace OscJack
             return server;
         }
 
+        public static OscServer GetSharedServer(int port, string multicast)
+        {
+            OscServer server;
+            if (!_servers.TryGetValue(port, out server))
+            {
+                server = new OscServer(port, multicast);
+                _servers[port] = server;
+            }
+            return server;
+        }
+
         public static OscClient GetSharedClient(string ipAddress, int port)
         {
             var key = GetClientKey(ipAddress, port);

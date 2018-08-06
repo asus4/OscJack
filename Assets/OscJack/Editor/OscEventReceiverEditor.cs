@@ -11,6 +11,8 @@ namespace OscJack
     class OscEventReceiverEditor : Editor
     {
         SerializedProperty _udpPort;
+        SerializedProperty _useMulticast;
+        SerializedProperty _multicast;
         SerializedProperty _oscAddress;
         SerializedProperty _dataType;
 
@@ -24,25 +26,30 @@ namespace OscJack
         SerializedProperty _vector2IntEvent;
         SerializedProperty _vector3IntEvent;
 
+
         static class Labels
         {
             public static readonly GUIContent UDPPortNumber = new GUIContent("UDP Port Number");
+            public static readonly GUIContent UseMulticast = new GUIContent("Use Multicast");
+            public static readonly GUIContent MulticastAddress = new GUIContent("Multicast Address");
             public static readonly GUIContent OSCAddress = new GUIContent("OSC Address");
         }
 
         void OnEnable()
         {
-            _udpPort    = serializedObject.FindProperty("_udpPort");
+            _udpPort = serializedObject.FindProperty("_udpPort");
+            _useMulticast = serializedObject.FindProperty("_useMultcast");
+            _multicast = serializedObject.FindProperty("_multicast");
             _oscAddress = serializedObject.FindProperty("_oscAddress");
-            _dataType   = serializedObject.FindProperty("_dataType");
+            _dataType = serializedObject.FindProperty("_dataType");
 
-            _event           = serializedObject.FindProperty("_event");
-            _intEvent        = serializedObject.FindProperty("_intEvent");
-            _floatEvent      = serializedObject.FindProperty("_floatEvent");
-            _stringEvent     = serializedObject.FindProperty("_stringEvent");
-            _vector2Event    = serializedObject.FindProperty("_vector2Event");
-            _vector3Event    = serializedObject.FindProperty("_vector3Event");
-            _vector4Event    = serializedObject.FindProperty("_vector4Event");
+            _event = serializedObject.FindProperty("_event");
+            _intEvent = serializedObject.FindProperty("_intEvent");
+            _floatEvent = serializedObject.FindProperty("_floatEvent");
+            _stringEvent = serializedObject.FindProperty("_stringEvent");
+            _vector2Event = serializedObject.FindProperty("_vector2Event");
+            _vector3Event = serializedObject.FindProperty("_vector3Event");
+            _vector4Event = serializedObject.FindProperty("_vector4Event");
             _vector2IntEvent = serializedObject.FindProperty("_vector2IntEvent");
             _vector3IntEvent = serializedObject.FindProperty("_vector3IntEvent");
         }
@@ -52,6 +59,11 @@ namespace OscJack
             serializedObject.Update();
 
             EditorGUILayout.DelayedIntField(_udpPort, Labels.UDPPortNumber);
+            _useMulticast.boolValue = EditorGUILayout.Toggle(Labels.UseMulticast, _useMulticast.boolValue);
+            if (_useMulticast.boolValue)
+            {
+                EditorGUILayout.DelayedTextField(_multicast, Labels.MulticastAddress);
+            }
             EditorGUILayout.DelayedTextField(_oscAddress, Labels.OSCAddress);
             EditorGUILayout.PropertyField(_dataType);
 
@@ -59,13 +71,13 @@ namespace OscJack
             {
                 switch ((DataType)_dataType.enumValueIndex)
                 {
-                    case DataType.None:       EditorGUILayout.PropertyField(_event);           break;
-                    case DataType.Int:        EditorGUILayout.PropertyField(_intEvent);        break;
-                    case DataType.Float:      EditorGUILayout.PropertyField(_floatEvent);      break;
-                    case DataType.String:     EditorGUILayout.PropertyField(_stringEvent);     break;
-                    case DataType.Vector2:    EditorGUILayout.PropertyField(_vector2Event);    break;
-                    case DataType.Vector3:    EditorGUILayout.PropertyField(_vector3Event);    break;
-                    case DataType.Vector4:    EditorGUILayout.PropertyField(_vector4Event);    break;
+                    case DataType.None: EditorGUILayout.PropertyField(_event); break;
+                    case DataType.Int: EditorGUILayout.PropertyField(_intEvent); break;
+                    case DataType.Float: EditorGUILayout.PropertyField(_floatEvent); break;
+                    case DataType.String: EditorGUILayout.PropertyField(_stringEvent); break;
+                    case DataType.Vector2: EditorGUILayout.PropertyField(_vector2Event); break;
+                    case DataType.Vector3: EditorGUILayout.PropertyField(_vector3Event); break;
+                    case DataType.Vector4: EditorGUILayout.PropertyField(_vector4Event); break;
                     case DataType.Vector2Int: EditorGUILayout.PropertyField(_vector2IntEvent); break;
                     case DataType.Vector3Int: EditorGUILayout.PropertyField(_vector3IntEvent); break;
                 }

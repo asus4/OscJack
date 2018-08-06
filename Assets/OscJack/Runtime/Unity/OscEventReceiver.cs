@@ -23,20 +23,22 @@ namespace OscJack
 
         #region Receiver event classes
 
-        [System.Serializable] class IntEvent        : UnityEvent<int> {}
-        [System.Serializable] class FloatEvent      : UnityEvent<float> {}
-        [System.Serializable] class StringEvent     : UnityEvent<string> {}
-        [System.Serializable] class Vector2Event    : UnityEvent<Vector2> {}
-        [System.Serializable] class Vector3Event    : UnityEvent<Vector3> {}
-        [System.Serializable] class Vector4Event    : UnityEvent<Vector4> {}
-        [System.Serializable] class Vector2IntEvent : UnityEvent<Vector2Int> {}
-        [System.Serializable] class Vector3IntEvent : UnityEvent<Vector3Int> {}
+        [System.Serializable] class IntEvent : UnityEvent<int> { }
+        [System.Serializable] class FloatEvent : UnityEvent<float> { }
+        [System.Serializable] class StringEvent : UnityEvent<string> { }
+        [System.Serializable] class Vector2Event : UnityEvent<Vector2> { }
+        [System.Serializable] class Vector3Event : UnityEvent<Vector3> { }
+        [System.Serializable] class Vector4Event : UnityEvent<Vector4> { }
+        [System.Serializable] class Vector2IntEvent : UnityEvent<Vector2Int> { }
+        [System.Serializable] class Vector3IntEvent : UnityEvent<Vector3Int> { }
 
         #endregion
 
         #region Editable fields
 
         [SerializeField] int _udpPort = 9000;
+        [SerializeField] bool _useMultcast = false;
+        [SerializeField] string _multicast = "";
         [SerializeField] string _oscAddress = "/unity";
         [SerializeField] DataType _dataType;
 
@@ -166,7 +168,15 @@ namespace OscJack
         {
             if (string.IsNullOrEmpty(_currentAddress)) return;
 
-            var server = OscMaster.GetSharedServer(_currentPort);
+            OscServer server;
+            if (_useMultcast)
+            {
+                server = OscMaster.GetSharedServer(_currentPort);
+            }
+            else
+            {
+                server = OscMaster.GetSharedServer(_currentPort, _multicast);
+            }
             server.MessageDispatcher.RemoveCallback(_currentAddress, OnDataReceive);
 
             _currentAddress = null;
